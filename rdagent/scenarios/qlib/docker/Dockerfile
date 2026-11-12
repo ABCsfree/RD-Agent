@@ -22,3 +22,6 @@ RUN python -m pip install -e .
 RUN pip install catboost
 RUN pip install xgboost
 RUN pip install tables
+
+# mlflow 新版弃用 FileStore 后端，Qlib 的 mlruns 记录需要此豁免
+ENV MLFLOW_ALLOW_FILE_STORE=true
