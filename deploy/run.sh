@@ -31,7 +31,12 @@ fi
 
 export CONDA_DEFAULT_ENV="${CONDA_DEFAULT_ENV:-rdagent}"
 export MODEL_COSTEER_ENV_TYPE="${MODEL_COSTEER_ENV_TYPE:-docker}"
-export UI_SERVER_AUTH_TOKEN="${UI_SERVER_AUTH_TOKEN:-change-me-in-dot-env}"
+# UI_SERVER_AUTH_TOKEN is NOT exported here on purpose: python-dotenv never
+# overrides an existing env var, so an exported default value would shadow the
+# real token from .env. Keep it in .env only (see .env.example).
+# Push live traces (hypotheses / code / backtest charts) to the Web UI.
+# Required on the fin_factor side; without it the Web UI stays empty.
+export LOG_UI_SERVER_PORT="${LOG_UI_SERVER_PORT:-19899}"
 # Optional: Simplified Chinese free-text output from the LLM (also settable in .env)
 # export DEFAULT_SYSTEM_PROMPT="You are an AI assistant who helps to answer user's questions. IMPORTANT: Always write all free-text content in Simplified Chinese. Keep code, JSON field names, and variable names in English unchanged."
 
