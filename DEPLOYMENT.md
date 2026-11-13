@@ -132,11 +132,16 @@ npm run build:flask                   # 产物输出到 ../git_ignore_folder/sta
 # 因子迭代（nohup 常驻，防终端/会话回收杀进程）
 nohup ./run.sh fin_factor > ~/fin_factor.log 2>&1 < /dev/null &
 
-# Web UI（另开终端）
-nohup ./run.sh server_ui > ~/server_ui.log 2>&1 < /dev/null &
+# 看历史迭代的主 UI（Streamlit，推荐）——必须带 --log-dir，否则侧边栏无下拉、主区空白
+nohup ./run.sh ui --port 19898 --log-dir <repo>/log > ~/streamlit_ui.log 2>&1 < /dev/null &
 ```
 
-浏览器打开 `http://localhost:19899/?token=<你的UI_SERVER_AUTH_TOKEN>`（首次带 token 会种 cookie）。
+**看迭代内容（Streamlit UI，`http://localhost:19898`，无需 token）**：
+左侧 Control Panel 下拉选中 session → **点击绿色「All Loops」按钮**（UI 是分步浏览设计，不点按钮只显示场景描述）→ 指标（IC）、假设、每轮代码和反馈会渲染出来。首次点大 session（约 1.1GB）需等待约 1 分钟。
+首次启动前需跳过 Streamlit 交互邮箱提示：`printf '[general]\nemail = ""\n' > ~/.streamlit/credentials.toml`。
+注意 `log/` 下会积累启动失败的空壳 session（目录里没有 `Loop_*`），下拉选中空壳会以为"没数据"——定期清理或直接选内容多的 session。
+
+另有一个 Vue 版实时 UI（`rdagent server_ui`，`http://localhost:19899/?token=...`），适合从页面上传数据起任务；命令行任务的**历史列表它不显示**（`/traces` 只扫 `git_ignore_folder/traces`），看历史请用 Streamlit UI。
 
 验证在跑：`tail -f ~/fin_factor.log`，看到 `Data already exists. Download skipped.` 和因子假设的 LLM 输出即为正常。
 
