@@ -31,6 +31,9 @@ fi
 
 export CONDA_DEFAULT_ENV="${CONDA_DEFAULT_ENV:-rdagent}"
 export MODEL_COSTEER_ENV_TYPE="${MODEL_COSTEER_ENV_TYPE:-docker}"
+# venv must be on PATH: `rdagent ui` spawns `streamlit` as a bare command,
+# and factor-code subprocesses resolve `python` through it as well.
+export PATH="$RDAGENT_DIR/.venv/bin:$PATH"
 # UI_SERVER_AUTH_TOKEN is NOT exported here on purpose: python-dotenv never
 # overrides an existing env var, so an exported default value would shadow the
 # real token from .env. Keep it in .env only (see .env.example).
